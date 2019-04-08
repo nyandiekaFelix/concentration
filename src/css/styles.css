@@ -1,23 +1,67 @@
+body, html {
+  background-color: rgb(48, 45, 45);
+  color: #fff;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.flex-container{
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-content: stretch;
+  -ms-flex-line-pack: stretch;
+  align-content: stretch;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+}
+
 .content{}
 
 .header{}
 
 .title{}
 
-.stats{}
+.stats{
+
+}
 
 .timer{}
 
-.moves{}
+.moves{
+  margin-left: 40px;
+}
 
-.deck{}
+.deck{
+  width: 64px;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
 
 .card{}
 
-.success{}
+.open-card{}
+
+.success-container{
+  margin: 62px;
+}
 
 .success-message{}
 
-.success-btn{}
+.success-btn{
+  margin-top: 20px;
+  height: 35px;
+  width: 70px;
+}
 
 .footer{}
