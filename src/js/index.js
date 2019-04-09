@@ -1,10 +1,11 @@
-;(function () {
+;(function (document) {
   'use strict';
 
   const deck = document.querySelector('.deck');
   const success = document.querySelector('.success');
   const timer = document.querySelector('.timer');
   const moves = document.querySelector('.moves');
+  const cardList = document.getElementsByClassName('card');
 
   const images = [
     { class: 'fab fa-react react', type: 'react'},
@@ -18,7 +19,6 @@
   ];
   let cards = images.map(image => `<div class="card"><i class="${image.class}" type="${image.type}"/></div>`);
   cards = [].concat(...Array.from({ length: 2 }, () => cards));
-  console.log(cards);
 
   let openCards = [];
   let movesCount = 0;
@@ -26,7 +26,8 @@
   let seconds = 0;
   let minutes = 0
   let hours = 0;
-  timer.innerHTML = `Hours: ${hours} Minutes: ${minutes} Seconds: ${seconds}`;
+  updateTimer();
+
 
   /**
    * @function shuffle
@@ -57,8 +58,8 @@
    *
    */
   function match() {
-    console.log(this);
     openCards.push(this);
+    console.log(openCards);
     if (openCards.length === 2) {
       moveCounter();
       if (openCards[0].type === openCards[1].type) { isMatch() }
@@ -81,6 +82,7 @@
    */
   function noMatch() {
     // Close selected & unmatched cards
+    // reset openCards[]
   }
 
   /**
@@ -100,14 +102,22 @@
    * @description calculate time taken by player to finish game
    */
   function startTimer() {
+    const start = Date.now();
     interval = setInterval(() => {
-      timer.innerHTML = `Hours: ${hours} Minutes: ${minutes} Seconds: ${seconds}`;
-
-      let duration = Date.now() - start;
+      const duration = Date.now() - start;
       seconds = Math.floor((duration % (1000 * 60)) / 1000);
       minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
       hours = Math.floor((duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      updateTimer();
     }, 1000);
+  }
+
+  /**
+   * @function updateTimer
+   * @description update timer display
+   */
+  function updateTimer() {
+    timer.innerHTML = `Hours: ${hours} Minutes: ${minutes} Seconds: ${seconds}`;
   }
 
   /**
@@ -116,20 +126,10 @@
    */
   function moveCounter() {
     ++movesCount;
-    moves.innerHTML = movesCount;
+    moves.innerHTML = `Moves: ${movesCount}`;
     if (movesCount === 1) {
       startTimer();
     }
-  }
-
-  /**
-   * @function start
-   * @description shuffle cards and start the game
-   */
-  function start() {
-    shuffle();
-    cards.forEach(card => { deck.innerHTML += card; });
-    moves.innerHTML = `Moves: ${movesCount}`;
   }
 
   /**
@@ -141,20 +141,26 @@
   }
 
   /**
+   * @function start
+   * @description shuffle cards and start the game
+   */
+  function start() {
+    shuffle();
+    cards.forEach(card => { deck.innerHTML += card; });
+    Array.from(cardList).forEach(card => {
+      card.addEventListener('click', openCard);
+      card.addEventListener('click', match);
+      card.addEventListener('click', done);
+    });
+    moves.innerHTML = `Moves: ${movesCount}`;
+  }
+
+  /**
    *
    *
    */
   function restart() { }
 
-
-  const cardList = document.getElementsByClassName('card');
-  Array.from(cardList).forEach(card => {
-    console.log('card', card);
-    card.addEventListener('click', openCard);
-    card.addEventListener('click', match);
-    card.addEventListener('click', done);
-  });
-
   document.body.onload = start();
 
-})();
+})(document);

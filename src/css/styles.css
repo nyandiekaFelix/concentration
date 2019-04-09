@@ -53,12 +53,14 @@ body, html {
 .open-card{}
 
 .success-container{
-  margin: 62px;
+  margin: 61px;
 }
 
 .success-message{}
 
 .success-btn{
+  outline: none;
+  border: none;
   margin-top: 20px;
   height: 35px;
   width: 70px;
