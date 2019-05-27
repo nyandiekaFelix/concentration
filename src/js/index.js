@@ -2,67 +2,99 @@
   'use strict';
 
   const deck = document.querySelector('.deck');
+  const restartBtn = document.querySelector('.restart-btn');
   const success = document.querySelector('.success');
   const timer = document.querySelector('.timer');
   const moves = document.querySelector('.moves');
   const cardList = document.getElementsByClassName('card');
+  const matchedCards = document.getElementsByClassName('matched-card');
 
   const images = [
-    { class: 'fab fa-react react', type: 'react'},
-    { class: 'fab fa-android android', type: 'android' },
-    { class: 'fab fa-apple apple', type: 'apple' },
-    { class: 'fab fa-angular angular', type: 'angular' },
-    { class: 'fab fa-vuejs vuejs', type: 'vue' },
-    { class: 'fab fa-aws aws', type: 'aws' },
-    { class: 'fab fa-stack-overflow stack-overflow', type: 'stack-overflow' },
-    { class: 'fab fa-grunt grunt', type: 'grunt' },
+    { icon: 'fab fa-2x fa-stack-2x fa-airbnb', type: 'airbnb' },
+    { icon: 'fab fa-2x fa-stack-2x fa-apple', type: 'apple' },
+    { icon: 'fab fa-2x fa-stack-2x fa-google', type: 'google' },
+    { icon: 'fab fa-2x fa-stack-2x fa-facebook-f', type: 'facebook-f' },
+    { icon: 'fab fa-2x fa-stack-2x fa-microsoft', type: 'microsoft' },
+    { icon: 'fab fa-2x fa-stack-2x fa-linux', type: 'linux' },
+    { icon: 'fab fa-2x fa-stack-2x fa-amazon', type: 'amazon' },
+    { icon: 'fab fa-2x fa-stack-2x fa-digital-ocean', type: 'digital-ocean' },
+    { icon: 'fab fa-2x fa-stack-2x fa-github', type: 'github' },
+    { icon: 'fab fa-2x fa-stack-2x fa-docker', type: 'docker' },
   ];
-  let cards = images.map(image => `<div class="card"><i class="${image.class}" type="${image.type}"/></div>`);
-  cards = [].concat(...Array.from({ length: 2 }, () => cards));
 
+  let grid = [];
   let openCards = [];
-  let movesCount = 0;
+  let movesCount;
   let interval;
-  let seconds = 0;
-  let minutes = 0
-  let hours = 0;
-  updateTimer();
-
+  let seconds;
+  let minutes
+  let hours;
 
   /**
-   * @function shuffle
-   * @description randomly place cards on the deck
+   * @function createGrid
+   * @description create card elements & append to DOM
    */
-  function shuffle() {
-    let current = cards.length;
-    let temp;
-    let random;
+  function createGrid() {
+    grid = images.concat(images).sort(_ => 0.5 - Math.random());
+    grid.forEach(item => {
+      const { icon, type } = item;
+      const card = document.createElement('div');
+      card.classList.add('card');
+      card.setAttribute('data-image', type);
 
-    while (current !== 0) {
-      random = Math.floor(Math.random() * current);
-      --current;
-      temp = cards[current];
-      cards[current] = cards[random];
-      cards[random] = temp;
-    }
+      const front = document.createElement('div');
+      front.setAttribute('class', 'card-content front');
+
+      const i = document.createElement('i');
+      i.setAttribute('class', icon);
+
+      const back = document.createElement('div');
+      back.setAttribute('class', 'card-content back');
+      back.appendChild(i);
+
+      deck.appendChild(card);
+      card.appendChild(front);
+      card.appendChild(back);
+    });
+  }
+
+  /**
+   * @function updateTimer
+   * @description update timer display
+   */
+  function updateTimer() {
+    timer.innerHTML = `Hours: ${hours} Minutes: ${minutes} Seconds: ${seconds}`;
+  }
+
+  /**
+   * @function updateMoves
+   * @description update moves display
+   */
+  function updateMoves() {
+    moves.innerHTML = `Moves: ${movesCount}`;
   }
 
   /**
    *
    *
    */
-  const openCard = function () { };
+  const toggleCard = function () {
+    console.log('toggleThis', this);
+    this.classList.toggle('open');
+  };
 
   /**
    *
    *
    */
   function match() {
+    console.log('openThis', this.getAttribute('data-image'));
+
     openCards.push(this);
     console.log(openCards);
     if (openCards.length === 2) {
       moveCounter();
-      if (openCards[0].type === openCards[1].type) { isMatch() }
+      if (openCards[0]['data-image'] === openCards[1]['data-image']) { isMatch() }
       noMatch();
     }
   }
@@ -113,20 +145,12 @@
   }
 
   /**
-   * @function updateTimer
-   * @description update timer display
-   */
-  function updateTimer() {
-    timer.innerHTML = `Hours: ${hours} Minutes: ${minutes} Seconds: ${seconds}`;
-  }
-
-  /**
    *
    *
    */
   function moveCounter() {
     ++movesCount;
-    moves.innerHTML = `Moves: ${movesCount}`;
+    updateMoves();
     if (movesCount === 1) {
       startTimer();
     }
@@ -137,7 +161,10 @@
    *
    */
   function done() {
-
+    if (matchedCards.length === 16) {
+      clearInterval(interval);
+      // Show congratulatory message
+    }
   }
 
   /**
@@ -145,21 +172,31 @@
    * @description shuffle cards and start the game
    */
   function start() {
-    shuffle();
-    cards.forEach(card => { deck.innerHTML += card; });
+    createGrid();
+    seconds = 0;
+    minutes = 0;
+    hours = 0;
+    updateTimer();
+
+    movesCount = 0;
+
     Array.from(cardList).forEach(card => {
-      card.addEventListener('click', openCard);
+      card.addEventListener('click', toggleCard);
       card.addEventListener('click', match);
       card.addEventListener('click', done);
     });
-    moves.innerHTML = `Moves: ${movesCount}`;
+    restartBtn.addEventListener('click', restart)
+    updateMoves();
   }
 
   /**
    *
    *
    */
-  function restart() { }
+  function restart() {
+    clearInterval(interval);
+    start();
+  }
 
   document.body.onload = start();
 

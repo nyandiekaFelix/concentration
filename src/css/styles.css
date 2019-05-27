@@ -4,7 +4,7 @@ body, html {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.flex-container{
+.flex-container {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
@@ -25,40 +25,75 @@ body, html {
   align-items: flex-start;
 }
 
-.content{}
+.content {}
 
-.header{}
+.header {}
 
-.title{}
+.title {
+  margin: 50px 1px;
+}
 
-.stats{
+.stats {
 
 }
 
-.timer{}
+.timer {}
 
-.moves{
+.moves {
   margin-left: 40px;
 }
 
-.deck{
-  width: 64px;
+.deck {
+  width: 700px;
+  margin-top: 20px;
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
 }
 
-.card{}
-
-.open-card{}
-
-.success-container{
-  margin: 61px;
+.card {
+  padding: 40px 70px 0 10px;
+  margin: 5px;
+  color: #000;
+  width: 60px;
+  cursor: pointer;
+  background: #fff;
+  transform-style: preserve-3d;
+  transition: all 1s ease-in-out;
+  min-width: 60px;
+  min-height: 70px;
 }
 
-.success-message{}
+.card-content {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+}
 
-.success-btn{
+.card.open {
+  transform: rotateY(180deg);
+}
+
+.card.back {
+  /* transform: rotateY(180deg); */
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: #000 !important;
+  background: url('img/angry.svg');
+}
+
+.disable-click {
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.success-container {
+  margin: 300px 70px;
+}
+
+.success-message {}
+
+.restart-btn {
   outline: none;
   border: none;
   margin-top: 20px;
@@ -66,4 +101,5 @@ body, html {
   width: 70px;
 }
 
-.footer{}
+.footer{
+}
