@@ -173,9 +173,10 @@
 
   /**
    * @function start
-   * @description shuffle cards and start the game
+   * @description populate deck and start the game
    */
   function start() {
+    deck.innerHTML = '';
     createGrid();
 
     seconds = 0;
