@@ -7,7 +7,6 @@
   const timer = document.querySelector('.timer');
   const moves = document.querySelector('.moves');
   const cardList = document.getElementsByClassName('card');
-  const matchedCards = document.getElementsByClassName('matched-card');
 
   const images = [
     { icon: 'fab fa-2x fa-stack-2x fa-airbnb', type: 'airbnb' },
@@ -23,7 +22,8 @@
   ];
 
   let grid = [];
-  let openCards = [];
+  let selectedCards = [];
+  let matchedCards = [];
   let movesCount;
   let interval;
   let seconds;
@@ -90,10 +90,10 @@
    *
    */
   function match() {
-    openCards.push(this);
-    if (openCards.length === 2) {
+    selectedCards.push(this);
+    if (selectedCards.length === 2) {
       moveCounter();
-      openCards[0].dataset.image === openCards[1].dataset.image
+      selectedCards[0].dataset.image === selectedCards[1].dataset.image
         ? isMatch() : noMatch();
     }
   }
@@ -105,7 +105,8 @@
    */
   function isMatch() {
     // add classes to permanently display matched cards
-    openCards = [];
+    matchedCards = matchedCards.concat(selectedCards);
+    selectedCards = [];
   }
 
   /**
@@ -115,7 +116,7 @@
    */
   function noMatch() {
     // Close selected & unmatched cards
-    openCards = [];
+    selectedCards = [];
   }
 
   /**
