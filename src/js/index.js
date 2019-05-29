@@ -75,7 +75,8 @@
   }
 
   /**
-   *
+   * @function toggleCard
+   * @description toggle between classes to show or hide card
    *
    */
   const toggleCard = function () {
@@ -84,54 +85,56 @@
   };
 
   /**
-   *
+   * @function match
+   * @description check if cards match
    *
    */
   function match() {
-    console.log('openThis', this.getAttribute('data-image'));
-
     openCards.push(this);
-    console.log(openCards);
     if (openCards.length === 2) {
       moveCounter();
-      if (openCards[0]['data-image'] === openCards[1]['data-image']) { isMatch() }
-      noMatch();
+      openCards[0].dataset.image === openCards[1].dataset.image
+        ? isMatch() : noMatch();
     }
   }
 
   /**
-   *
+   * @function isMatch
+   * @description permanently open pair of cards that have been matched
    *
    */
   function isMatch() {
     // add classes to permanently display matched cards
-    // reset openCards[]
+    openCards = [];
   }
 
   /**
-   *
+   * @function noMatch
+   * @description close clicked pair of cards after a mismatch
    *
    */
   function noMatch() {
     // Close selected & unmatched cards
-    // reset openCards[]
+    openCards = [];
   }
 
   /**
-   *
+   * @function disableClick
+   * @description temporarily disble clicking on a card that has been selected
    *
    */
   function disableClick() { }
 
   /**
-   *
+   * @function enableClick
+   * @description reverse what was done by disableClick()
    *
    */
   function enableClick() { }
 
   /**
    * @function timer
-   * @description calculate time taken by player to finish game
+   * @description calculate time elapsed since game started
    */
   function startTimer() {
     const start = Date.now();
@@ -145,19 +148,19 @@
   }
 
   /**
-   *
+   * @fucntion moveCounter
+   * @description count number of moves user makes
    *
    */
   function moveCounter() {
     ++movesCount;
     updateMoves();
-    if (movesCount === 1) {
-      startTimer();
-    }
+    if (movesCount === 1) startTimer();
   }
 
   /**
-   *
+   * @function done
+   * @description end the game once all cards have been correctly matched
    *
    */
   function done() {
@@ -173,12 +176,14 @@
    */
   function start() {
     createGrid();
+
     seconds = 0;
     minutes = 0;
     hours = 0;
     updateTimer();
 
     movesCount = 0;
+    updateMoves();
 
     Array.from(cardList).forEach(card => {
       card.addEventListener('click', toggleCard);
@@ -186,11 +191,11 @@
       card.addEventListener('click', done);
     });
     restartBtn.addEventListener('click', restart)
-    updateMoves();
   }
 
   /**
-   *
+   * @function restart
+   * @description forfeit current game or start a new one
    *
    */
   function restart() {
